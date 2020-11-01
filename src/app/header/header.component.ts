@@ -18,12 +18,4 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.collapsed = true;
   }
-
-  recipesClicked() {
-    this.recipesBtnEvent.emit();
-  }
-
-  shoppingListClicked() {
-    this.shoppingListBtnEvent.emit();
-  }
 }
