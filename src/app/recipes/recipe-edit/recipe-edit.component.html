@@ -11,7 +11,8 @@
           <button
             type="button"
             class="btn btn-danger"
-            style="margin-left: 10px">Cancel</button>
+            style="margin-left: 10px"
+            (click)="navigateBackToRecipes()">Cancel</button>
         </div>
       </div>
       <div class="row">
@@ -31,6 +32,7 @@
           <div class="form-group">
             <label for="imageUrl">Image URL</label>
             <input
+              #imageUrl
               formControlName="imageUrl"
               type="text"
               id="imageUrl"
@@ -40,7 +42,7 @@
       </div>
       <div class="row">
         <div class="col-xs-12">
-          <img src="" class=img-responsive>
+          <img [src]="imageUrl.value" class=img-responsive>
         </div>
       </div>
       <div class="row">
