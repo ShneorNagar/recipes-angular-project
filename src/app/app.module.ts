@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -16,6 +17,10 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import {AppRouting} from './app-routing';
 import { RecipeStartComponent } from './recipes/recipe-start/recipe-start.component';
 import {RecipeService} from './recipes/recipe.service';
+import {HttpService} from './shared/http.service';
+import { AuthComponent } from './auth/auth.component';
+import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
+import {AuthInterceptor} from './auth/auth-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -31,14 +36,20 @@ import {RecipeService} from './recipes/recipe.service';
     RecipeEditComponent,
     PageNotFoundComponent,
     RecipeStartComponent,
+    AuthComponent,
+    LoadingSpinnerComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
     AppRouting,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
-  providers: [RecipeService],
+  providers: [RecipeService, HttpService,
+    {provide: HTTP_INTERCEPTORS,
+    multi: true,
+    useClass: AuthInterceptor}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

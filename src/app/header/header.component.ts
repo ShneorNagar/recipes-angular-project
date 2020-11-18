@@ -1,4 +1,8 @@
 import {Component, OnInit, Output, EventEmitter} from '@angular/core';
+import {HttpHandler} from '@angular/common/http';
+import {HttpService} from '../shared/http.service';
+import {UsersService} from '../auth/users.service';
+import {User} from '../auth/user.model';
 
 @Component({
   selector: 'app-header',
@@ -11,11 +15,26 @@ export class HeaderComponent implements OnInit {
   @Output() shoppingListBtnEvent = new EventEmitter();
 
   collapsed: boolean;
+  isAuthenticated: boolean;
 
-
-  constructor() { }
+  constructor(private httpService: HttpService,
+              private auth: UsersService) { }
 
   ngOnInit(): void {
     this.collapsed = true;
+    this.auth.userSub.subscribe((user: User) =>{
+      this.isAuthenticated = !!user;
+    })
+  }
+
+  saveAllRecipes() {
+    this.httpService.saveAllRecipes()
+      .subscribe(res =>{
+        console.log(res)
+      });
+  }
+
+  fetchAllRecipe() {
+    this.httpService.fetchAllRecipes().subscribe();
   }
 }
