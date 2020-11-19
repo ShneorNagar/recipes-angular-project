@@ -4,7 +4,7 @@ import {Recipe} from '../recipes/recipe.model';
 import {RecipeService} from '../recipes/recipe.service';
 import {Observable} from 'rxjs';
 import {exhaustMap, map, take, tap} from 'rxjs/operators';
-import {UsersService} from '../auth/users.service';
+import {AuthService} from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class HttpService {
 
   constructor(private http: HttpClient,
               private recipesService: RecipeService,
-              private auth: UsersService) {
+              private auth: AuthService) {
   }
 
   // will override all existing recipes in DB

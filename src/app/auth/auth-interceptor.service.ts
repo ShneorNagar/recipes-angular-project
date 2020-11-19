@@ -2,12 +2,12 @@ import {HttpEvent, HttpHandler, HttpInterceptor, HttpParams, HttpRequest} from '
 import {exhaustMap, take, tap} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {Injectable} from '@angular/core';
-import {UsersService} from './users.service';
+import {AuthService} from './auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor{
 
-  constructor(private auth: UsersService) {
+  constructor(private auth: AuthService) {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {

@@ -9,11 +9,16 @@ import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
 import {RecipeStartComponent} from './recipes/recipe-start/recipe-start.component';
 import {RecipesResolverService} from './recipes/recipes-resolver.service';
 import {AuthComponent} from './auth/auth.component';
+import {AuthGuardService} from './auth/auth.guard.service';
 
 const appRoutes: Routes = [
   {path: '', redirectTo: '/recipes', pathMatch: 'full'},
   {
-    path: 'recipes', component: RecipesComponent, children: [
+
+    path: 'recipes',
+    component: RecipesComponent,
+    canActivate: [AuthGuardService],
+    children: [
       {
         path: '', component: RecipeStartComponent,
         resolve: [RecipesResolverService]

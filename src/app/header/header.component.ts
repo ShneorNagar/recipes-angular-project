@@ -1,7 +1,7 @@
 import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 import {HttpHandler} from '@angular/common/http';
 import {HttpService} from '../shared/http.service';
-import {UsersService} from '../auth/users.service';
+import {AuthService} from '../auth/auth.service';
 import {User} from '../auth/user.model';
 
 @Component({
@@ -18,7 +18,7 @@ export class HeaderComponent implements OnInit {
   isAuthenticated: boolean;
 
   constructor(private httpService: HttpService,
-              private auth: UsersService) { }
+              private auth: AuthService) { }
 
   ngOnInit(): void {
     this.collapsed = true;
@@ -36,5 +36,9 @@ export class HeaderComponent implements OnInit {
 
   fetchAllRecipe() {
     this.httpService.fetchAllRecipes().subscribe();
+  }
+
+  logOut() {
+    this.auth.logOut();
   }
 }

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {NgForm} from '@angular/forms';
-import {AuthResponse, UsersService} from './users.service';
+import {AuthResponse, AuthService} from './auth.service';
 import {Observable} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 
@@ -14,7 +14,7 @@ export class AuthComponent implements OnInit {
   isLoading: boolean;
   error: string;
 
-  constructor(private usersService: UsersService,
+  constructor(private usersService: AuthService,
               private router: Router,
               private route: ActivatedRoute) {
   }
