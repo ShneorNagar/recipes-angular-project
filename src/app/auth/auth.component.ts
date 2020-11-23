@@ -1,22 +1,28 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {NgForm} from '@angular/forms';
 import {AuthResponse, AuthService} from './auth.service';
-import {Observable} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
+import {AlertComponent} from '../alert/alert.component';
+import {PlaceholderDirective} from '../shared/placeholder.directive';
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.css']
 })
-export class AuthComponent implements OnInit {
+export class AuthComponent implements OnInit, OnDestroy {
   isLogInMode: boolean = true;
   isLoading: boolean;
   error: string;
+  alertCloseSub: Subscription;
+
+  @ViewChild(PlaceholderDirective) alertHost: PlaceholderDirective;
 
   constructor(private usersService: AuthService,
               private router: Router,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private compFactoryResolver: ComponentFactoryResolver) {
   }
 
   ngOnInit(): void {
@@ -51,18 +57,43 @@ export class AuthComponent implements OnInit {
     authSubs.subscribe((res) => {
         console.log(res);
         this.isLoading = false;
-        this.router.navigate(['/recipes'], {relativeTo: this.route}).then(res =>{
-        }).catch(err =>{
-          console.log(err)
-        })
+        this.router.navigate(['/recipes'], {relativeTo: this.route}).then(res => {
+        }).catch(err => {
+          console.log(err);
+        });
       },
       (errMessage) => {
         this.error = errMessage;
         console.log(errMessage);
+        this.createAlertComponent(errMessage);
         this.isLoading = false;
       });
 
     form.reset();
   }
 
+  onClose() {
+    this.error = null;
+  }
+
+  createAlertComponent(error: string) {
+    const alertComponentFactory = this.compFactoryResolver.resolveComponentFactory(AlertComponent);
+    const alertCompViewChildRef = this.alertHost.viewContainerRef;
+    alertCompViewChildRef.clear();
+    const alertComponentRef = alertCompViewChildRef.createComponent(alertComponentFactory);
+
+    alertComponentRef.instance.message = error;
+    const alertCloseSub = alertComponentRef.instance.close.subscribe(()=>{
+      alertCompViewChildRef.clear();
+      if (this.alertCloseSub){
+        this.alertCloseSub.unsubscribe();
+      }
+    })
+  }
+
+  ngOnDestroy(): void {
+    if (this.alertCloseSub){
+      this.alertCloseSub.unsubscribe();
+    }
+  }
 }

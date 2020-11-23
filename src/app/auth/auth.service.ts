@@ -111,7 +111,7 @@ export class AuthService {
           break;
       }
     }
-    this.userSub.next(null);
+    // this.userSub.next(null);
     return throwError(errorMessage);
   }
 }
